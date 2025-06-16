@@ -4,6 +4,7 @@ import com.parkmate.userservice.common.exception.BaseException;
 import com.parkmate.userservice.common.response.ResponseStatus;
 import com.parkmate.userservice.users.domain.User;
 import com.parkmate.userservice.users.dto.request.UserRegisterRequestDto;
+import com.parkmate.userservice.users.dto.request.UserRegisterSocialRequestDto;
 import com.parkmate.userservice.users.dto.request.UserUpdateRequestDto;
 import com.parkmate.userservice.users.dto.response.UserGetNameResponseDto;
 import com.parkmate.userservice.users.dto.response.UserGetPointResponseDto;
@@ -38,6 +39,25 @@ public class UserServiceImpl implements UserService {
 
         } else {
             userRepository.save(userRegisterRequestDto.toEntity());
+        }
+    }
+
+    @Transactional
+    @Override
+    public void createSocialUser(UserRegisterSocialRequestDto userRegisterSocialRequestDto) {
+        Optional<User> isExist = userRepository.findByUserUuid(userRegisterSocialRequestDto.getUserUuid());
+
+        if (isExist.isPresent()) {
+            User existingUser = isExist.get();
+
+            if (existingUser.isDeleted()) {
+                existingUser.restore();
+                userRepository.save(existingUser);
+            }else{
+                throw new BaseException(ResponseStatus.FAILED_TO_FIND_USER);
+            }
+        }else{
+            userRepository.save(userRegisterSocialRequestDto.toEntity());
         }
     }
 

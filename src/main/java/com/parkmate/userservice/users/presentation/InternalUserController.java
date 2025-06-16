@@ -3,7 +3,9 @@ package com.parkmate.userservice.users.presentation;
 import com.parkmate.userservice.common.response.ApiResponse;
 import com.parkmate.userservice.users.application.UserService;
 import com.parkmate.userservice.users.dto.request.UserRegisterRequestDto;
+import com.parkmate.userservice.users.dto.request.UserRegisterSocialRequestDto;
 import com.parkmate.userservice.users.vo.request.UserRegisterRequestVo;
+import com.parkmate.userservice.users.vo.request.UserRegisterSocialRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,16 @@ public class InternalUserController {
         return ApiResponse.of(
                 HttpStatus.OK,
                 "유저를 등록하였습니다"
+        );
+    }
+
+    @PostMapping("/social")
+    public ApiResponse<String> registerSocial(@RequestBody UserRegisterSocialRequestVo userRegisterSocialRequestVo) {
+        userService.createSocialUser(UserRegisterSocialRequestDto.from(userRegisterSocialRequestVo));
+
+        return ApiResponse.of(
+                HttpStatus.OK,
+                "소셜 유저를 등록하였습니다."
         );
     }
 
