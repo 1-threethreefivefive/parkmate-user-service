@@ -29,7 +29,7 @@ public class User extends BaseEntity {
     private String name;
 
     @Comment("유저 전화번호")
-    @Column(name = "phone_number", nullable = false, unique = true, length = 20)
+    @Column(name = "phone_number", nullable = true, unique = true, length = 20)
     private String phoneNumber;
 
     @Comment("유저 포인트")
@@ -63,6 +63,10 @@ public class User extends BaseEntity {
     public void delete(){
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
+    }
+
+    public void restore() {
+        this.isDeleted = false;
     }
 
 }
