@@ -2,6 +2,8 @@ package com.parkmate.userservice.users.application;
 
 import com.parkmate.userservice.common.exception.BaseException;
 import com.parkmate.userservice.common.response.ResponseStatus;
+import com.parkmate.userservice.kafka.event.UpdateUserProfileEvent;
+import com.parkmate.userservice.kafka.producer.UpdateUserProfileProducer;
 import com.parkmate.userservice.users.domain.User;
 import com.parkmate.userservice.users.dto.request.UserRegisterRequestDto;
 import com.parkmate.userservice.users.dto.request.UserUpdateRequestDto;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UpdateUserProfileProducer updateUserProfileProducer;
 
     @Transactional
     @Override
@@ -52,4 +55,20 @@ public class UserServiceImpl implements UserService {
         user.delete();
     }
 
+    @Transactional
+    @Override
+    public void updateUserProfile(String userUuid, String name) {
+
+        User user = userRepository.findByUserUuid(userUuid)
+                .orElseThrow(() -> new BaseException(ResponseStatus. FAILED_TO_FIND_USER));
+
+        user.updateProfile(name);
+
+        UpdateUserProfileEvent event = UpdateUserProfileEvent.builder()
+                .userUuid(userUuid)
+                .name(name)
+                .build();
+
+        updateUserProfileProducer.send(event);
+    }
 }

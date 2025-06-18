@@ -8,6 +8,7 @@ import com.parkmate.userservice.users.vo.response.UserGetResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -62,4 +63,17 @@ public class UserController {
         );
     }
 
+    @Operation(
+            summary = "사용자 이름 변경",
+            description = "사용자의 이름을 변경하고, 변경된 내용을 Kafka 이벤트로 발행합니다.",
+            tags = {"USER-SERVICE"}
+    )
+    @PutMapping("/name")
+    public ResponseEntity<Void> updateUserName(
+            @RequestHeader("X-User-UUID") String userUuid,
+            @RequestBody UserUpdateRequestDto request
+    ) {
+        userService.updateUserProfile(userUuid, request.getName());
+        return ResponseEntity.ok().build();
+    }
 }
