@@ -32,7 +32,7 @@ public class UserFavoriteController {
     public ApiResponse<String> registerFavorite(@RequestHeader("X-User-UUID") String userUuid,
                                                 @RequestBody UserFavoriteRegisterRequestVo userFavoriteRegisterRequestVo) {
 
-        userFavoriteService.register(UserFavoriteRegisterRequestDto.from(userUuid, userFavoriteRegisterRequestVo));
+        userFavoriteService.register(UserFavoriteRegisterRequestDto.of(userUuid, userFavoriteRegisterRequestVo));
 
         return ApiResponse.of(
                 HttpStatus.CREATED,
@@ -68,7 +68,7 @@ public class UserFavoriteController {
     public ApiResponse<String> deleteFavorite(@RequestHeader("X-User-UUID") String userUuid,
                                               @RequestBody UserFavoriteDeleteRequestVo userFavoriteDeleteRequestVo) {
 
-        userFavoriteService.deleteFavorite(UserFavoriteDeleteRequestDto.from(userUuid, userFavoriteDeleteRequestVo.getParkingLotUuid()));
+        userFavoriteService.deleteFavorite(UserFavoriteDeleteRequestDto.of(userUuid, userFavoriteDeleteRequestVo.getParkingLotUuid()));
 
         return ApiResponse.of(
                 HttpStatus.OK,

@@ -17,7 +17,7 @@ public class UserFavoriteDeleteRequestDto {
         this.parkingLotUuid = parkingLotUuid;
     }
 
-    public static UserFavoriteDeleteRequestDto from(String userUuid, String parkingLotUuid) {
+    public static UserFavoriteDeleteRequestDto of(String userUuid, String parkingLotUuid) {
         return UserFavoriteDeleteRequestDto.builder()
                 .userUuid(userUuid)
                 .parkingLotUuid(parkingLotUuid)

@@ -23,22 +23,21 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
     @Transactional
     @Override
     public void register(UserFavoriteRegisterRequestDto userFavoriteRegisterRequestDto) {
-        Optional<UserFavorite> isExist = userFavoriteRepository.findByUserUuidAndParkingLotUuid(
+        Optional<UserFavorite> optionalExistingFavorite = userFavoriteRepository.findByUserUuidAndParkingLotUuid(
                 userFavoriteRegisterRequestDto.getUserUuid(),
                 userFavoriteRegisterRequestDto.getParkingLotUuid());
 
-        if (isExist.isPresent()) {
-            UserFavorite existingFavorite = isExist.get();
+        optionalExistingFavorite.ifPresentOrElse(
+                existingFavorite -> {
+                    if (existingFavorite.isDeleted()) {
+                        existingFavorite.restore();
+                    } else {
+                        throw new BaseException(ResponseStatus.ALREADY_EXIST_FAVORITE);
+                    }
+                },
+                () -> userFavoriteRepository.save(userFavoriteRegisterRequestDto.toEntity())
+        );
 
-            if (existingFavorite.isDeleted()) {
-                existingFavorite.restore();
-                userFavoriteRepository.save(existingFavorite);
-            } else {
-                throw new BaseException(ResponseStatus.ALREADY_EXIST_FAVORITE);
-            }
-        } else {
-            userFavoriteRepository.save((userFavoriteRegisterRequestDto.toEntity()));
-        }
     }
 
     @Transactional

@@ -25,40 +25,37 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void createUser(UserRegisterRequestDto userRegisterRequestDto) {
-        Optional<User> isExist = userRepository.findByUserUuid(userRegisterRequestDto.getUserUuid());
+        Optional<User> optionalExistingUser = userRepository.findByUserUuid(userRegisterRequestDto.getUserUuid());
 
-        if (isExist.isPresent()) {
-            User existingUser = isExist.get();
+        optionalExistingUser.ifPresentOrElse(
+                existingUser -> {
+                    if (existingUser.isDeleted()) {
+                        existingUser.restore();
+                    } else {
+                        throw new BaseException(ResponseStatus.ALREADY_EXIST_USER);
+                    }
+                },
+                () -> userRepository.save(userRegisterRequestDto.toEntity())
+        );
 
-            if (existingUser.isDeleted()) {
-                existingUser.restore();
-                userRepository.save(existingUser);
-            } else {
-                throw new BaseException(ResponseStatus.ALREADY_EXIST_USER);
-            }
-
-        } else {
-            userRepository.save(userRegisterRequestDto.toEntity());
-        }
     }
 
     @Transactional
     @Override
     public void createSocialUser(UserRegisterSocialRequestDto userRegisterSocialRequestDto) {
-        Optional<User> isExist = userRepository.findByUserUuid(userRegisterSocialRequestDto.getUserUuid());
+        Optional<User> optionalExistingSocialUser = userRepository.findByUserUuid(userRegisterSocialRequestDto.getUserUuid());
 
-        if (isExist.isPresent()) {
-            User existingUser = isExist.get();
+        optionalExistingSocialUser.ifPresentOrElse(
+                existingSocialUser -> {
+                    if (existingSocialUser.isDeleted()) {
+                        existingSocialUser.restore();
+                    } else {
+                        throw new BaseException(ResponseStatus.ALREADY_EXIST_USER);
+                    }
+                },
+                () -> userRepository.save(userRegisterSocialRequestDto.toEntity())
+        );
 
-            if (existingUser.isDeleted()) {
-                existingUser.restore();
-                userRepository.save(existingUser);
-            }else{
-                throw new BaseException(ResponseStatus.FAILED_TO_FIND_USER);
-            }
-        }else{
-            userRepository.save(userRegisterSocialRequestDto.toEntity());
-        }
     }
 
     @Transactional

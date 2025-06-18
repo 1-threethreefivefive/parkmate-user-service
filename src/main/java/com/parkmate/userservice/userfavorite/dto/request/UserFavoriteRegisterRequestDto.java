@@ -17,7 +17,7 @@ public class UserFavoriteRegisterRequestDto {
         this.parkingLotUuid = parkingLotUuid;
     }
 
-    public static UserFavoriteRegisterRequestDto from(String userUuid, UserFavoriteRegisterRequestVo userFavoriteRegisterRequestVo) {
+    public static UserFavoriteRegisterRequestDto of(String userUuid, UserFavoriteRegisterRequestVo userFavoriteRegisterRequestVo) {
         return UserFavoriteRegisterRequestDto.builder()
                 .userUuid(userUuid)
                 .parkingLotUuid(userFavoriteRegisterRequestVo.getParkingLotUuid())
