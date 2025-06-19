@@ -1,7 +1,7 @@
 package com.parkmate.userservice.kafka.config;
 
-import com.parkmate.userservice.kafka.event.CreateReviewJoinUserEvent;
-import com.parkmate.userservice.kafka.event.UpdateUserProfileEvent;
+import com.parkmate.userservice.kafka.event.ReviewCreatedJoinUserEvent;
+import com.parkmate.userservice.kafka.event.UserUpdatedProfileEvent;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -26,22 +26,22 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, CreateReviewJoinUserEvent> createReviewJoinUserProducerFactory() {
+    public ProducerFactory<String, ReviewCreatedJoinUserEvent> createReviewJoinUserProducerFactory() {
         return new DefaultKafkaProducerFactory<>(commonProducerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, CreateReviewJoinUserEvent> createReviewJoinUserKafkaTemplate() {
+    public KafkaTemplate<String, ReviewCreatedJoinUserEvent> createReviewJoinUserKafkaTemplate() {
         return new KafkaTemplate<>(createReviewJoinUserProducerFactory());
     }
 
     @Bean
-    public ProducerFactory<String, UpdateUserProfileEvent> updateUserProfileProducerFactory() {
+    public ProducerFactory<String, UserUpdatedProfileEvent> updateUserProfileProducerFactory() {
         return new DefaultKafkaProducerFactory<>(commonProducerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, UpdateUserProfileEvent> updateUserProfileKafkaTemplate() {
+    public KafkaTemplate<String, UserUpdatedProfileEvent> updateUserProfileKafkaTemplate() {
         return new KafkaTemplate<>(updateUserProfileProducerFactory());
     }
 }

@@ -2,8 +2,8 @@ package com.parkmate.userservice.users.application;
 
 import com.parkmate.userservice.common.exception.BaseException;
 import com.parkmate.userservice.common.response.ResponseStatus;
-import com.parkmate.userservice.kafka.event.UpdateUserProfileEvent;
-import com.parkmate.userservice.kafka.producer.UpdateUserProfileProducer;
+import com.parkmate.userservice.kafka.event.UserUpdatedProfileEvent;
+import com.parkmate.userservice.kafka.producer.UserUpdatedProfileProducer;
 import com.parkmate.userservice.users.domain.User;
 import com.parkmate.userservice.users.dto.request.UserRegisterRequestDto;
 import com.parkmate.userservice.users.dto.request.UserUpdateRequestDto;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UpdateUserProfileProducer updateUserProfileProducer;
+    private final UserUpdatedProfileProducer userUpdatedProfileProducer;
 
     @Transactional
     @Override
@@ -64,11 +64,11 @@ public class UserServiceImpl implements UserService {
 
         user.updateProfile(name);
 
-        UpdateUserProfileEvent event = UpdateUserProfileEvent.builder()
+        UserUpdatedProfileEvent event = UserUpdatedProfileEvent.builder()
                 .userUuid(userUuid)
                 .name(name)
                 .build();
 
-        updateUserProfileProducer.send(event);
+        userUpdatedProfileProducer.send(event);
     }
 }

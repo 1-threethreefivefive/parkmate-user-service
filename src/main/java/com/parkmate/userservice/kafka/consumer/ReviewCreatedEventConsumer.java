@@ -1,8 +1,10 @@
 package com.parkmate.userservice.kafka.consumer;
 
-import com.parkmate.userservice.kafka.event.CreateReviewEvent;
-import com.parkmate.userservice.kafka.event.CreateReviewJoinUserEvent;
-import com.parkmate.userservice.kafka.producer.CreateReviewJoinUserProducer;
+import com.parkmate.userservice.common.exception.BaseException;
+import com.parkmate.userservice.common.response.ResponseStatus;
+import com.parkmate.userservice.kafka.event.ReviewCreatedEvent;
+import com.parkmate.userservice.kafka.event.ReviewCreatedJoinUserEvent;
+import com.parkmate.userservice.kafka.producer.ReviewCreatedJoinUserProducer;
 import com.parkmate.userservice.users.domain.User;
 import com.parkmate.userservice.users.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,31 +15,29 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CreateReviewEventConsumer {
+public class ReviewCreatedEventConsumer {
 
     private final UserRepository userRepository;
-    private final CreateReviewJoinUserProducer createReviewJoinUserProducer;
+    private final ReviewCreatedJoinUserProducer reviewCreatedJoinUserProducer;
 
-    @KafkaListener(topics = "create-review", groupId = "create-review-join-user-group")
-    public void consumeCreateReviewEvent(CreateReviewEvent event) {
+    @KafkaListener(topics = "review.review.created", groupId = "create-review-join-user-group")
+    public void consumeCreateReviewEvent(ReviewCreatedEvent event) {
         log.info("[Kafka] Consuming CreateReviewEvent: {}", event);
 
         User user = userRepository.findByUserUuid(event.getUserUuid())
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + event.getUserUuid()));
+                .orElseThrow(() -> new BaseException(ResponseStatus.FAILED_TO_FIND_USER));
 
-        CreateReviewJoinUserEvent joinEvent = CreateReviewJoinUserEvent.builder()
+        ReviewCreatedJoinUserEvent joinEvent = ReviewCreatedJoinUserEvent.builder()
                 .reviewUuid(event.getReviewUuid())
                 .userUuid(event.getUserUuid())
                 .name(user.getName())
                 .parkingLotUuid(event.getParkingLotUuid())
                 .content(event.getContent())
                 .imageUrls(event.getImageUrls())
-                .likeCount(event.getLikeCount())
-                .dislikeCount(event.getDislikeCount())
                 .rating(event.getRating())
                 .createdAt(event.getCreatedAt())
                 .build();
 
-        createReviewJoinUserProducer.send(joinEvent);
+        reviewCreatedJoinUserProducer.send(joinEvent);
     }
 }
