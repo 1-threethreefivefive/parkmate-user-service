@@ -1,4 +1,4 @@
-package com.parkmate.userservice.users.domain;
+package com.parkmate.userservice.userfavorite.domain;
 
 import com.parkmate.userservice.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "users")
-public class User extends BaseEntity {
+@Table(name = "user_favorite")
+public class UserFavorite extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +24,9 @@ public class User extends BaseEntity {
     @Column(name = "user_uuid", nullable = false, length = 36)
     private String userUuid;
 
-    @Comment("유저 이름")
-    @Column(name = "name", nullable = false, length = 20)
-    private String name;
-
-    @Comment("유저 전화번호")
-    @Column(name = "phone_number", nullable = true, unique = true, length = 20)
-    private String phoneNumber;
-
-    @Comment("유저 포인트")
-    @Column(name = "point", nullable = false)
-    private int point = 0;
+    @Comment("주차장 UUID")
+    @Column(name = "parking_lot_uuid", nullable = false, length = 36)
+    private String parkingLotUuid;
 
     @Comment("삭제 여부")
     @Column(name = "is_deleted", nullable = false)
@@ -45,22 +37,15 @@ public class User extends BaseEntity {
     private LocalDateTime deletedAt;
 
     @Builder
-    private User(Long id, String userUuid, String name, String phoneNumber, int point, boolean isDeleted, LocalDateTime deletedAt) {
+    private UserFavorite(Long id, String userUuid, String parkingLotUuid, boolean isDeleted, LocalDateTime deletedAt) {
         this.id = id;
         this.userUuid = userUuid;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.point = point;
+        this.parkingLotUuid = parkingLotUuid;
         this.isDeleted = isDeleted;
         this.deletedAt = deletedAt;
     }
 
-    public void update(String name, String phoneNumber) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void delete(){
+    public void delete() {
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();
     }
