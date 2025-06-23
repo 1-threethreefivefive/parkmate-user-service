@@ -65,8 +65,14 @@ public class User extends BaseEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+
+    public void updateProfile(String name) {
+        this.name = name;
+    }
+
     public void restore() {
         this.isDeleted = false;
     }
+
 
 }
