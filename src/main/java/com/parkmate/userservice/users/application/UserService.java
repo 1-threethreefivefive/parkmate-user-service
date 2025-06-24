@@ -19,8 +19,11 @@ public interface UserService {
 
     void deleteUser(String userUuid);
 
+    void updateUserProfile(String userUuid, String name);
+
     UserGetNameResponseDto findUserNameByUuid(String userUuid);
 
     UserGetPointResponseDto findUserPointByUuid(String userUuid);
+
 
 }

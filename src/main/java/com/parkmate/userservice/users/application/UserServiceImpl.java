@@ -2,6 +2,8 @@ package com.parkmate.userservice.users.application;
 
 import com.parkmate.userservice.common.exception.BaseException;
 import com.parkmate.userservice.common.response.ResponseStatus;
+import com.parkmate.userservice.kafka.event.UserUpdatedProfileEvent;
+import com.parkmate.userservice.kafka.producer.UserUpdatedProfileProducer;
 import com.parkmate.userservice.users.domain.User;
 import com.parkmate.userservice.users.dto.request.UserRegisterRequestDto;
 import com.parkmate.userservice.users.dto.request.UserRegisterSocialRequestDto;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserUpdatedProfileProducer userUpdatedProfileProducer;
 
     @Transactional
     @Override
@@ -86,6 +89,23 @@ public class UserServiceImpl implements UserService {
         user.delete();
     }
 
+    @Transactional
+    @Override
+    public void updateUserProfile(String userUuid, String name) {
+
+        User user = userRepository.findByUserUuid(userUuid)
+                .orElseThrow(() -> new BaseException(ResponseStatus. FAILED_TO_FIND_USER));
+
+        user.updateProfile(name);
+
+        UserUpdatedProfileEvent event = UserUpdatedProfileEvent.builder()
+                .userUuid(userUuid)
+                .name(name)
+                .build();
+
+        userUpdatedProfileProducer.send(event);
+    }
+  
     @Override
     public UserGetNameResponseDto findUserNameByUuid(String userUuid) {
         User user = userRepository.findByUserUuid(userUuid)
@@ -101,5 +121,4 @@ public class UserServiceImpl implements UserService {
 
         return UserGetPointResponseDto.from(user);
     }
-
 }
