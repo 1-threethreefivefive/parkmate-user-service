@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  user:
+    container_name: user-service
+    image: 090188239653.dkr.ecr.ap-northeast-2.amazonaws.com/user-service
+    volumes:
+      - /home/ubuntu/config/user/application.yml:/config/user/application.yml
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/config/user/application.yml
+    ports:
+      - "9200:9200"
+    env_file:
+      - .env
+    networks:
+      - backend
+
+networks:
+  backend:
+    external: true

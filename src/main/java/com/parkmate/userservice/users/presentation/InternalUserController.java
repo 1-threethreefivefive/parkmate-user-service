@@ -24,7 +24,7 @@ public class InternalUserController {
     @Operation(
             summary = "유저 등록",
             description = "Auth-service에서 openFeign으로 전송받은 UserRegisterRequestVo로 유저를 등록하는 API 입니다.",
-            tags = "{USER-SERVICE}"
+            tags = "{INTERNAL-USER-SERVICE}"
     )
     @PostMapping
     public ApiResponse<String> register(@RequestBody UserRegisterRequestVo userRegisterRequestVo) {
