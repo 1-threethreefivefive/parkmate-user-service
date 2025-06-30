@@ -4,8 +4,10 @@ import com.parkmate.userservice.userfavorite.domain.UserFavorite;
 import com.parkmate.userservice.userfavorite.vo.request.UserFavoriteRegisterRequestVo;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserFavoriteRegisterRequestDto {
 
     private String userUuid;

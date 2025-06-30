@@ -17,6 +17,7 @@ public enum ResponseStatus {
      * 4xx: 클라이언트 오류
      **/
     FAILED_TO_FIND_USER(HttpStatus.NOT_FOUND, false, 404, "해당 유저를 찾을 수 없습니다."),
+    FAILED_TO_FIND_VEHICLE(HttpStatus.NOT_FOUND, false, 404, "자동차를 찾을 수 없습니다."),
     ALREADY_EXIST_FAVORITE(HttpStatus.CONFLICT, false, 409, "이미 즐겨찾기가 존재합니다."),
     ALREADY_EXIST_USER(HttpStatus.CONFLICT, false, 409, "이미 유저가 존재합니다."),
 
