@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
         userUpdatedProfileProducer.send(event);
     }
-  
+
     @Override
     public UserGetNameResponseDto findUserNameByUuid(String userUuid) {
         User user = userRepository.findByUserUuid(userUuid)
