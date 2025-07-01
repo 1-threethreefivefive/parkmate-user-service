@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Long> {
+public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Long>, UserFavoriteCustomRepository {
 
     Optional<UserFavorite> findByUserUuid(String userUuid);
 

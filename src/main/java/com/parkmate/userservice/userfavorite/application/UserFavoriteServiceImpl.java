@@ -1,10 +1,13 @@
 package com.parkmate.userservice.userfavorite.application;
 
 import com.parkmate.userservice.common.exception.BaseException;
+import com.parkmate.userservice.common.response.CursorPage;
 import com.parkmate.userservice.common.response.ResponseStatus;
 import com.parkmate.userservice.userfavorite.domain.UserFavorite;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteDeleteRequestDto;
+import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteRegisterRequestDto;
+import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteGetResponseDto;
 import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteResponseDto;
 import com.parkmate.userservice.userfavorite.infrastructure.UserFavoriteRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +62,13 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
                 .stream()
                 .map(UserFavoriteResponseDto::from)
                 .toList();
+    }
+
+    @Override
+    public CursorPage<UserFavoriteGetResponseDto> getAllFavorites(UserFavoriteGetRequestDto userFavoriteGetRequestDto) {
+        CursorPage<UserFavorite> userFavorites = userFavoriteRepository.getParkingLotUuidsByUserUuidAndIsDeletedFalse(userFavoriteGetRequestDto);
+
+        return userFavorites.map(UserFavoriteGetResponseDto::from);
     }
 
 }
