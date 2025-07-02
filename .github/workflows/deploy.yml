@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - chore/cicd-init-setup
 
 jobs:
   deploy:
@@ -69,7 +68,9 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             # 환경변수 파일 생성
-            cat > .env << EOF
+            mkdir -p ~/env
+            
+            cat > ~/env/.env.user << EOF
             AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
             EUREKA_HOST=${{ secrets.EUREKA_HOST }}
@@ -78,12 +79,6 @@ jobs:
             MYSQL_HOST=${{ secrets.MYSQL_HOST }}
             MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-            REDIS_HOST=${{ secrets.REDIS_HOST }}
-            REDIS_PORT=${{ secrets.REDIS_PORT }}
-            BIZNO_API_KEY=${{ secrets.BIZNO_API_KEY }}
-            JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-            MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-            MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
             EOF
             
             # application.yml 파일을 컨테이너가 접근 가능한 위치에 생성
