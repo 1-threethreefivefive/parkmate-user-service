@@ -5,6 +5,7 @@ import com.parkmate.userservice.common.response.CursorPage;
 import com.parkmate.userservice.common.response.ResponseStatus;
 import com.parkmate.userservice.userfavorite.domain.UserFavorite;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteDeleteRequestDto;
+import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetIsFavoriteRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteRegisterRequestDto;
 import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteGetResponseDto;
@@ -69,6 +70,14 @@ public class UserFavoriteServiceImpl implements UserFavoriteService {
         CursorPage<UserFavorite> userFavorites = userFavoriteRepository.getParkingLotUuidsByUserUuidAndIsDeletedFalse(userFavoriteGetRequestDto);
 
         return userFavorites.map(UserFavoriteGetResponseDto::from);
+    }
+
+    @Override
+    public boolean isFavorite(UserFavoriteGetIsFavoriteRequestDto userFavoriteGetIsFavoriteRequestDto) {
+        return userFavoriteRepository
+                .findByUserUuidAndParkingLotUuidAndIsDeletedFalse(userFavoriteGetIsFavoriteRequestDto.getUserUuid(),
+                        userFavoriteGetIsFavoriteRequestDto.getParkingLotUuid())
+                .isPresent();
     }
 
 }
