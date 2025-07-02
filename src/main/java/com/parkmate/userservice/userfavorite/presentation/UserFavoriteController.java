@@ -1,12 +1,17 @@
 package com.parkmate.userservice.userfavorite.presentation;
 
 import com.parkmate.userservice.common.response.ApiResponse;
+import com.parkmate.userservice.common.response.CursorPage;
 import com.parkmate.userservice.userfavorite.application.UserFavoriteService;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteDeleteRequestDto;
+import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteRegisterRequestDto;
+import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteGetResponseDto;
 import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteResponseDto;
 import com.parkmate.userservice.userfavorite.vo.request.UserFavoriteDeleteRequestVo;
+import com.parkmate.userservice.userfavorite.vo.request.UserFavoriteGetRequestVo;
 import com.parkmate.userservice.userfavorite.vo.request.UserFavoriteRegisterRequestVo;
+import com.parkmate.userservice.userfavorite.vo.response.UserFavoriteGetResponseVo;
 import com.parkmate.userservice.userfavorite.vo.response.UserFavoriteResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +78,23 @@ public class UserFavoriteController {
         return ApiResponse.of(
                 HttpStatus.OK,
                 "즐겨찾기를 삭제했습니다."
+        );
+    }
+
+    @Operation(
+            summary = "커서 기반 즐겨찾기 목록 조회",
+            description = "X-User-UUID 헤더에서 유저 UUID를 받아 커서 기반으로 즐겨찾기 목록을 조회합니다.",
+            tags = {"USER-FAVORITE-SERVICE"}
+    )
+    @GetMapping("/favorites/cursor")
+    public ApiResponse<CursorPage<UserFavoriteGetResponseVo>> getAllFavorites(
+            @RequestHeader("X-User-UUID") String userUuid,
+            @ModelAttribute UserFavoriteGetRequestVo userFavoriteGetRequestVo
+    ) {
+        return ApiResponse.ok(
+                userFavoriteService.getAllFavorites(UserFavoriteGetRequestDto.
+                                of(userUuid, userFavoriteGetRequestVo))
+                        .map(UserFavoriteGetResponseDto::toVo)
         );
     }
 
