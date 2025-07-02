@@ -1,6 +1,5 @@
 package com.parkmate.userservice.userfavorite.dto.request;
 
-import com.parkmate.userservice.userfavorite.vo.request.UserFavoriteGetIsFavoriteRequestVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +19,10 @@ public class UserFavoriteGetIsFavoriteRequestDto {
     }
 
 
-    public static UserFavoriteGetIsFavoriteRequestDto of(String userUuid, UserFavoriteGetIsFavoriteRequestVo userFavoriteGetIsFavoriteRequestVo) {
+    public static UserFavoriteGetIsFavoriteRequestDto of(String userUuid, String parkingLotUuid) {
         return UserFavoriteGetIsFavoriteRequestDto.builder()
                 .userUuid(userUuid)
-                .parkingLotUuid(userFavoriteGetIsFavoriteRequestVo.getParkingLotUuid())
+                .parkingLotUuid(parkingLotUuid)
                 .build();
     }
 
