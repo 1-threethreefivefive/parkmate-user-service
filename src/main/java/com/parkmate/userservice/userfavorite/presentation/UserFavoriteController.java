@@ -81,6 +81,11 @@ public class UserFavoriteController {
         );
     }
 
+    @Operation(
+            summary = "커서 기반 즐겨찾기 목록 조회",
+            description = "X-User-UUID 헤더에서 유저 UUID를 받아 커서 기반으로 즐겨찾기 목록을 조회합니다.",
+            tags = {"USER-FAVORITE-SERVICE"}
+    )
     @GetMapping("/favorites/cursor")
     public ApiResponse<CursorPage<UserFavoriteGetResponseVo>> getAllFavorites(
             @RequestHeader("X-User-UUID") String userUuid,
