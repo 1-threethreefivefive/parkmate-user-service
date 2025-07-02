@@ -81,12 +81,6 @@ jobs:
             MYSQL_HOST=${{ secrets.MYSQL_HOST }}
             MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}
             MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
-            REDIS_HOST=${{ secrets.REDIS_HOST }}
-            REDIS_PORT=${{ secrets.REDIS_PORT }}
-            BIZNO_API_KEY=${{ secrets.BIZNO_API_KEY }}
-            JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-            MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-            MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
             EOF
             
             # application.yml 파일을 컨테이너가 접근 가능한 위치에 생성
