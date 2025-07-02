@@ -105,14 +105,17 @@ public class UserFavoriteController {
             tags = {"USER-FAVORITE-SERVICE"}
     )
     @GetMapping("/favorites/check/{parkingLotUuid}")
-    public boolean checkIsFavorite(
+    public ApiResponse<Boolean> checkIsFavorite(
             @RequestHeader("X-User-UUID") String userUuid,
             @PathVariable String parkingLotUuid
     ) {
         boolean isFavorite = userFavoriteService.isFavorite(UserFavoriteGetIsFavoriteRequestDto.of(userUuid,
                 parkingLotUuid));
 
-        return isFavorite;
+        return ApiResponse.of(
+                HttpStatus.CREATED,
+                isFavorite
+        );
     }
 
 }
