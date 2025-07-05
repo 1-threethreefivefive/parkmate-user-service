@@ -4,6 +4,7 @@ import com.parkmate.userservice.common.response.ApiResponse;
 import com.parkmate.userservice.common.response.CursorPage;
 import com.parkmate.userservice.userfavorite.application.UserFavoriteService;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteDeleteRequestDto;
+import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetIsFavoriteRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteGetRequestDto;
 import com.parkmate.userservice.userfavorite.dto.request.UserFavoriteRegisterRequestDto;
 import com.parkmate.userservice.userfavorite.dto.response.UserFavoriteGetResponseDto;
@@ -95,6 +96,25 @@ public class UserFavoriteController {
                 userFavoriteService.getAllFavorites(UserFavoriteGetRequestDto.
                                 of(userUuid, userFavoriteGetRequestVo))
                         .map(UserFavoriteGetResponseDto::toVo)
+        );
+    }
+
+    @Operation(
+            summary = "즐겨찾기 여부 확인",
+            description = "X-User-UUID 헤더와 parkingLotUuid를 통해 해당 주차장이 즐겨찾기인지 여부를 확인합니다.",
+            tags = {"USER-FAVORITE-SERVICE"}
+    )
+    @GetMapping("/favorites/check/{parkingLotUuid}")
+    public ApiResponse<Boolean> checkIsFavorite(
+            @RequestHeader("X-User-UUID") String userUuid,
+            @PathVariable String parkingLotUuid
+    ) {
+        boolean isFavorite = userFavoriteService.isFavorite(UserFavoriteGetIsFavoriteRequestDto.of(userUuid,
+                parkingLotUuid));
+
+        return ApiResponse.of(
+                HttpStatus.CREATED,
+                isFavorite
         );
     }
 

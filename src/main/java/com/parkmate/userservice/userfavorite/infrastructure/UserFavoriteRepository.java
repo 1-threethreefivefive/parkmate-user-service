@@ -16,4 +16,6 @@ public interface UserFavoriteRepository extends JpaRepository<UserFavorite, Long
 
     Optional<UserFavorite> findByUserUuidAndParkingLotUuid(String userUuid, String parkingLotUuid);
 
+    Optional<UserFavorite> findByUserUuidAndParkingLotUuidAndIsDeletedFalse(String userUuid, String parkingLotUuid);
+
 }
